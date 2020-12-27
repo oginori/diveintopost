@@ -30,7 +30,10 @@ class TeamsController < ApplicationController
   end
 
   def update
-    if @team.owner == current_user
+    if params[:new_owner_id].present?
+      @team.update_columns(owner_id: params[:new_owner_id])
+      redirect_to @team, notice: I18n.t('views.messages.update_owner')
+    elsif @team.owner == current_user
       @team.update(team_params)
       redirect_to @team, notice: I18n.t('views.messages.update_team')
     else
