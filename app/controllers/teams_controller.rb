@@ -32,6 +32,7 @@ class TeamsController < ApplicationController
   def update
     if params[:new_owner_id].present?
       @team.update_columns(owner_id: params[:new_owner_id])
+      AssignMailer.change_owner(@team.owner).deliver
       redirect_to @team, notice: I18n.t('views.messages.update_owner')
     elsif @team.owner == current_user
       @team.update(team_params)
